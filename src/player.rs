@@ -1,5 +1,5 @@
-use crate::{components::{PlayerBundle, Player, ColliderBundle, NameBundle}, loader::TextureAssets, GameState};
-use bevy::{prelude::*, render::camera::ScalingMode};
+use crate::{components::{PlayerBundle, Player, ColliderBundle, NameBundle}, loader::TextureAssets, GameState, camera::{self, GameCamera},};
+use bevy::{prelude::*};
 use bevy_rapier2d::prelude::*;
 
 pub struct PlayerPlugin;
@@ -7,23 +7,12 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app
-        .add_system(startup.in_schedule(OnEnter(GameState::Playing)))
+        .add_system(startup.in_schedule(OnEnter(GameState::Playing)).after(camera::startup))
         .add_system(movement.in_set(OnUpdate(GameState::Playing)));
     }
 }
 
-fn startup(mut commands: Commands, textures: Res<TextureAssets>) {
-    let camera = commands.spawn(Camera2dBundle {
-        projection: OrthographicProjection {
-            scaling_mode: ScalingMode::AutoMax {
-                max_width: 480.0,
-                max_height: 480.0,
-            },
-            ..default()
-        },
-        ..default()
-    }).id();
-
+fn startup(mut commands: Commands, textures: Res<TextureAssets>, camera: Res<GameCamera>) {
     commands.spawn(PlayerBundle {
         sprite: SpriteBundle {
             texture: textures.debug_man_small.clone(),
@@ -40,7 +29,7 @@ fn startup(mut commands: Commands, textures: Res<TextureAssets>) {
     })
     .insert(GravityScale(0.0))
     .insert(NameBundle::new("player"))
-    .add_child(camera);
+    .add_child(camera.0);
 
     commands.spawn(ColliderBundle::default());
 }

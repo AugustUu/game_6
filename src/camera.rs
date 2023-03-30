@@ -1,7 +1,6 @@
 use bevy::{prelude::*, render::camera::ScalingMode, window::PrimaryWindow};
-use bevy_inspector_egui::bevy_egui::WindowSize;
 
-use crate::GameState;
+use crate::{GameState, components::Player};
 
 
 #[derive(Resource)]
@@ -39,14 +38,14 @@ pub fn startup(mut commands: Commands, mut camera: ResMut<GameCamera>) {
 
 }
 
-fn movement(mut query: Query<&mut Transform,With<Camera>>, windows: Query<&Window, With<PrimaryWindow>>){
+fn movement(mut query: Query<&mut Transform,With<Camera>>, windows: Query<&Window, With<PrimaryWindow>>, mut player: Query<&mut Player>){
     
     let window = windows.single();
-    //size.single().
 
     if let Some(position) = window.cursor_position(){
         if let Ok(mut transform) = query.get_single_mut(){
             let offset = position / Vec2::new(window.resolution.physical_width() as f32,window.resolution.physical_height() as f32) - Vec2::splat(0.5);
+            player.single_mut().direction = offset;
             transform.translation = Vec3::new(offset.x,offset.y,0.0) * 50.0;
         }
     }

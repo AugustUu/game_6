@@ -12,14 +12,18 @@ impl NameBundle{
 }
 
 #[derive(Component, Default, Clone)]
-pub struct Player {}
+pub struct Player {
+    pub direction: Vec2,
+    pub animation_timer: Timer,
+    pub walking: bool,
+}
 
 #[derive(Bundle, Default)]
 pub struct PlayerBundle {
     pub player: Player,
 
     #[bundle]
-    pub sprite: SpriteBundle,
+    pub sprite: SpriteSheetBundle,
 
     #[bundle]
     pub collider_bundle: ColliderBundle,

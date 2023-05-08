@@ -38,7 +38,6 @@ fn startup(mut commands: Commands, textures: Res<TextureAssets>, camera: Res<Gam
     .insert(NameBundle::new("player"))
     .add_child(camera.0);
 
-    commands.spawn(ColliderBundle::default());
 }
 
 

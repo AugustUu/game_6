@@ -44,9 +44,10 @@ fn movement(mut query: Query<&mut Transform,With<Camera>>, windows: Query<&Windo
 
     if let Some(position) = window.cursor_position(){
         if let Ok(mut transform) = query.get_single_mut(){
-            let offset = position / Vec2::new(window.resolution.physical_width() as f32,window.resolution.physical_height() as f32) - Vec2::splat(0.5);
+            let mut offset = position / Vec2::new(window.resolution.physical_width() as f32,window.resolution.physical_height() as f32) - Vec2::splat(0.5); // mouse offset
+            offset *= 50.0;
             player.single_mut().direction = offset;
-            transform.translation = Vec3::new(offset.x,offset.y,0.0) * 50.0;
+            transform.translation = Vec3::new(offset.x,offset.y,0.0);
         }
     }
     

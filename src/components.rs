@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 #[derive(Bundle, Default)]
@@ -30,12 +31,19 @@ pub struct PlayerBundle {
 }
 
 
-#[derive(Bundle,Clone,)]
+
+#[derive(Bundle,Clone)]
 pub struct ColliderBundle{
     pub rigidbody: RigidBody,
     pub velocity: Velocity,
     pub collider: Collider,
     pub locked_axes: LockedAxes
+}
+
+impl LdtkIntCell for ColliderBundle {
+    fn bundle_int_cell(_: IntGridCell, _: &LayerInstance) -> Self {
+        ColliderBundle::default()
+    }
 }
 
 impl Default for ColliderBundle {

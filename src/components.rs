@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::weapon::Weapon;
+
 #[derive(Bundle, Default)]
 pub struct NameBundle{
     name: Name
@@ -17,6 +19,7 @@ pub struct Player {
     pub direction: Vec2,
     pub animation_timer: Timer,
     pub walking: bool,
+    pub inventory: [Weapon;3],
 }
 
 #[derive(Bundle, Default)]

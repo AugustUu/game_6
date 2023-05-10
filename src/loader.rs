@@ -20,6 +20,13 @@ pub struct TextureAssets {
     #[asset(path = "textures/debug_man.png")]
     pub debug_man: Handle<Image>,
 
+    #[asset(path = "textures/shot_gun.png")]
+    pub shot_gun: Handle<Image>,
+
+    #[asset(path = "textures/lightning_bulb_gun.png")]
+    pub lightning_bulb_gun: Handle<Image>,
+
+
     #[asset(texture_atlas(tile_size_x = 16.0, tile_size_y = 16.0, columns = 5, rows = 1, ))]
     #[asset(path = "textures/player_sprites.png")]
     pub player_sprites: Handle<TextureAtlas>,

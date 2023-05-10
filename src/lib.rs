@@ -16,6 +16,9 @@ pub use crate::loader::LoaderPlugin;
 mod map;
 pub use crate::map::MapPlugin;
 
+mod weapon;
+pub use crate::weapon::WeaponPlugin;
+
 pub mod components;
 
 

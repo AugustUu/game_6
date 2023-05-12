@@ -34,7 +34,7 @@ fn startup(mut commands: Commands, textures: Res<TextureAssets>, camera: Res<Gam
         },
         ..default()
     })
-    .insert(GravityScale(0.0))
+    .insert(GravityScale(1.0))
     .insert(NameBundle::new("player"))
     .add_child(camera.0);
 
@@ -44,22 +44,28 @@ fn startup(mut commands: Commands, textures: Res<TextureAssets>, camera: Res<Gam
 fn movement(mut query: Query<(&mut Player, &mut Velocity)>, keyboard_input: Res<Input<KeyCode>>){
 
     if let Ok((mut player,mut velocity)) = query.get_single_mut() {
-        let up = keyboard_input.pressed(KeyCode::W) || keyboard_input.pressed(KeyCode::Up);
-        let down = keyboard_input.pressed(KeyCode::S) || keyboard_input.pressed(KeyCode::Down);
+        let jump = keyboard_input.pressed(KeyCode::Space) || keyboard_input.pressed(KeyCode::Up);
         let left = keyboard_input.pressed(KeyCode::A) || keyboard_input.pressed(KeyCode::Left);
         let right = keyboard_input.pressed(KeyCode::D) || keyboard_input.pressed(KeyCode::Right);
-        player.walking = up || down || left || right;
+        player.walking =  left || right;
 
         let x_axis = -(left as i8) + right as i8;
-        let y_axis = -(down as i8) + up as i8;
+        
 
-        let mut move_delta = Vec2::new(x_axis as f32, y_axis as f32);
-        if move_delta != Vec2::ZERO {
-            move_delta /= move_delta.length();
+
+        if jump && velocity.linvel.y < 0.01 && velocity.linvel.y >= 0.0 {
+            println!("jump");
+            velocity.linvel.y += 100.0
+        }else{
+            if jump{
+                println!("{}", velocity.linvel.y);
+            }
         }
         
         //println!("{}",transform.translation);
-        velocity.linvel = move_delta * 100.0;
+        if player.walking{
+            velocity.linvel.x = x_axis as f32 * 100.0
+        }
     }
 }
 

@@ -13,13 +13,14 @@ impl Plugin for MapPlugin {
         app
         .add_system(setup_map.in_schedule(OnEnter(GameState::Playing)))
         .register_ldtk_int_cell::<ColliderBundle>(1);
+        
     }
 }
 
 pub fn setup_map(mut commands: Commands,map_assets: Res<MapAssets>) {
     commands.spawn(LdtkWorldBundle {
         ldtk_handle: map_assets.test.clone(),
-        transform: Transform::from_xyz(0.0, 0.0, -2.0),
+        transform: Transform::from_xyz(-100.0, -100.0, -2.5),
         ..Default::default()
     }).insert(NameBundle::new("map"));
 }

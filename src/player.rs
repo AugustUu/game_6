@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{time::Duration, println};
 
 use crate::{components::{PlayerBundle, Player, ColliderBundle, NameBundle}, loader::TextureAssets, GameState, camera::{self, GameCamera},};
 use bevy::{prelude::*};
@@ -11,6 +11,7 @@ impl Plugin for PlayerPlugin {
         app
         .add_system(startup.in_schedule(OnEnter(GameState::Playing)).after(camera::startup))
         .add_system(movement.in_set(OnUpdate(GameState::Playing)))
+        .add_system(post_movement.in_set(OnUpdate(GameState::Playing)).after(movement))
         .add_system(animation.in_set(OnUpdate(GameState::Playing)));
     }
 }
@@ -27,11 +28,12 @@ fn startup(mut commands: Commands, textures: Res<TextureAssets>, camera: Res<Gam
             ..default()
         },
         collider_bundle: ColliderBundle { 
-            rigidbody: RigidBody::Dynamic,
+            rigidbody: RigidBody::Dynamic ,
             velocity: Velocity::zero(),
             collider: Collider::cuboid(8.0, 8.0),
             locked_axes: LockedAxes::ROTATION_LOCKED
         },
+
         ..default()
     })
     .insert(GravityScale(1.0))
@@ -50,22 +52,26 @@ fn movement(mut query: Query<(&mut Player, &mut Velocity)>, keyboard_input: Res<
         player.walking =  left || right;
 
         let x_axis = -(left as i8) + right as i8;
-        
 
-
-        if jump && velocity.linvel.y < 0.01 && velocity.linvel.y >= 0.0 {
+        if jump && player.on_ground {
             println!("jump");
             velocity.linvel.y += 100.0
-        }else{
-            if jump{
-                println!("{}", velocity.linvel.y);
-            }
         }
         
         //println!("{}",transform.translation);
         if player.walking{
             velocity.linvel.x = x_axis as f32 * 100.0
         }
+    }
+}
+
+fn post_movement(mut query: Query<(&mut Player, &mut KinematicCharacterControllerOutput)> ){
+    println!("{}",query.is_empty());
+    
+    if let Ok((mut player,controller)) = query.get_single_mut() {
+        player.on_ground = controller.grounded;
+        println!("b");
+
     }
 }
 

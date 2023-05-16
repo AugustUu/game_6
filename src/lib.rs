@@ -16,8 +16,8 @@ pub use crate::loader::LoaderPlugin;
 mod map;
 pub use crate::map::MapPlugin;
 
-mod weapon;
-pub use crate::weapon::WeaponPlugin;
+mod menu;
+pub use crate::menu::MenuPlugin;
 
 pub mod components;
 
@@ -26,6 +26,7 @@ pub mod components;
 enum GameState {
     #[default]
     Loading,
+    Menu,
     Playing,
 }
 
@@ -45,7 +46,8 @@ impl Plugin for GamePlugin {
             .add_plugin(LoaderPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(CameraPlugin)
-            .add_plugin(MapPlugin);
+            .add_plugin(MapPlugin)
+            .add_plugin(MenuPlugin);
 
 
         // #[cfg(debug_assertions)]

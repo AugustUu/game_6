@@ -9,10 +9,11 @@ pub struct LoaderPlugin;
 impl Plugin for LoaderPlugin {
     fn build(&self, app: &mut App) {
         app.add_loading_state(
-            LoadingState::new(GameState::Loading).continue_to_state(GameState::Playing),
+            LoadingState::new(GameState::Loading).continue_to_state(GameState::Menu),
         )
         .add_collection_to_loading_state::<_, TextureAssets>(GameState::Loading)
-        .add_collection_to_loading_state::<_, MapAssets>(GameState::Loading);
+        .add_collection_to_loading_state::<_, MapAssets>(GameState::Loading)
+        .add_collection_to_loading_state::<_, FontAssets>(GameState::Loading);
     }
 }
 #[derive(AssetCollection, Resource)]
@@ -36,4 +37,10 @@ pub struct TextureAssets {
 pub struct MapAssets{
     #[asset(path = "maps/test.ldtk")]
     pub test: Handle<LdtkAsset>,
+}
+
+#[derive(AssetCollection, Resource)]
+pub struct FontAssets{
+    #[asset(path = "fonts/LDFComicSans.ttf")]
+    pub font: Handle<Font>,
 }
